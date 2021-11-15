@@ -1,5 +1,7 @@
 import psycopg2
 from stock import Stock
+from basket import Basket
+from check_stock import Check_Stock
 from config import config
 
 class Interface():
@@ -21,11 +23,10 @@ class Interface():
         return (asterix_string)
 
     def options(self, chosen_option):
-        chosen_option = chosen_option
         if chosen_option == "browse":
             self.browse()
         elif chosen_option == "view basket":
-            Basket(None).show_basket()
+            self.show_basket_text()
         else:
             print("Oops, you must have made a typo. Let's try again :-)")
             self.greeting()
@@ -40,11 +41,23 @@ class Interface():
     def choose_item(self):
         chosen_item = input(F"""{Interface().asterix()}\n
         Please type which item you would like to view...\n""")
-        chosen_item = chosen_item.lower()
-        Check_Stock().check_the_item(chosen_item)
+        self.check_the_stock(chosen_item.lower())
+
+    def check_the_stock(self, chosen_item):
+        stock_checked = Check_Stock().check_the_item(chosen_item)
+        if stock_checked[1] == False:
+            print(F"\nWe do not have any {chosen_item} in stock\n")
+            Interface().crossroads_menu()
+        elif stock_checked[1] == True:
+            print(F"""\nWe have {chosen_item} in stock...\n
+            {chosen_item}: £{stock_checked[0][2]}\n""")
+            Interface().crossroads_menu(True)
+        else:
+            print("Error")
 
     def crossroads_menu(self, buy_option=False):
         if buy_option == False:
+            print(buy_option)
             crossroads_question = input(F"""
             {self.asterix()}\n
             What would you like to do?
@@ -68,7 +81,6 @@ class Interface():
         self.crossroads_answer_direction(crossroads_answer, buy_option)
 
     def crossroads_answer_direction(self, crossroads_answer, buy_option):
-        print(buy_option)
         if buy_option == True and crossroads_answer == "add to basket":
             print(F"""{Interface().asterix()}
 
@@ -88,46 +100,21 @@ class Interface():
         elif crossroads_answer == "search again":
             Interface().choose_item()
         elif crossroads_answer == "view basket":
-            Basket(None).show_basket()
+            self.show_basket_text()
         else:
             print("Oops, you have made a typo. Let's try that again...")
             Interface().crossroads_menu()
 
-class Basket():
-
-    def __init__(self, items):
-        self.items = items
-
-    def show_basket(self):
-        basket = [self.items]
-        if basket == [None]:
+    def show_basket_text(self):
+        if Basket(None).show_basket()[1] == False:
             print(F"""{Interface().asterix()}\n
             Your basket is currently empty""")
             Interface().greeting()
-        else:
+        elif Basket(None).show_basket()[1] == True:
             print(basket)
-
-
-class Check_Stock():
-
-    def check_the_item(self, chosen_item):
-        is_item_in_stock = Stock().check_current_stock(chosen_item)
-        print(is_item_in_stock)
-        if is_item_in_stock[1] == False:
-            print(F"\nWe do not have any {chosen_item} in stock\n")
-            Interface().crossroads_menu()
-        elif is_item_in_stock[1] == True:
-            print(F"""\nWe have {is_item_in_stock[0][1]} in stock...\n
-            {is_item_in_stock[0][1]}: £{is_item_in_stock[0][2]}\n""")
-            Interface().crossroads_menu(True)
         else:
             print("Error")
 
 
-
-
-
-Stock().create_table()
-Interface().greeting()
-# Stock().row_to_add_in_stock("shirts", 22.99)
-# Stock().remove_chosen_item_from_stock("shirts")
+# Stock().create_table()
+# Interface().greeting()
