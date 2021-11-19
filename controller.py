@@ -3,8 +3,6 @@ from view import *
 import cgi
 from model import *
 
-submitted_search = []
-
 class requestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path.endswith('/'):
@@ -39,14 +37,34 @@ class requestHandler(BaseHTTPRequestHandler):
             content_len = int(self.headers.get('Content-length'))
             pdict['CONTENT-LENGTH'] = content_len
             if ctype == 'multipart/form-data':
+                global submitted_search
+                submitted_search = []
                 fields = cgi.parse_multipart(self.rfile, pdict)
                 user_search = fields.get('search')
                 submitted_search.append(user_search[0])
 
-        self.send_response(301)
-        self.send_header('content-type', 'text/html')
-        self.send_header('Location', '/search-results')
-        self.end_headers()
+            self.send_response(301)
+            self.send_header('content-type', 'text/html')
+            self.send_header('Location', '/search-results')
+            self.end_headers()
+
+        if self.path.endswith('/view-basket'):
+            ctype, pdict = cgi.parse_header(self.headers.get('content-type'))
+            if ctype == 'multipart/form-data':
+                self.send_response(301)
+                self.send_header('content-type', 'text/html')
+                self.send_header('Location', '/view-basket')
+                self.end_headers()
+
+        if self.path.endswith('/'):
+            ctype, pdict = cgi.parse_header(self.headers.get('content-type'))
+            if ctype == 'multipart/form-data':
+                self.send_response(301)
+                self.send_header('content-type', 'text/html')
+                self.send_header('Location', '/')
+                self.end_headers()
+
+
 
 
 def main():

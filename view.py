@@ -29,7 +29,7 @@ class View():
         </html>
         """
 
-    def search_results(self, search_input='None'):
+    def search_results(self, is_stock_there_conditional='Nothing at all'):
         return F"""
         <html>
         <head>
@@ -40,7 +40,10 @@ class View():
             <h1>Search Results</h1>
 
                 <p1>We have the following...<br><p1>
-                <p2><br> {search_input[1]}: £{search_input[2]} </p2>
+                <p2><br> {is_stock_there_conditional} </p2>
+
+                <form method="POST" enctype="multipart/form-data" action="/">
+                <input type="submit" value="Back to Home Page"
 
         </body>
         </html>
@@ -58,6 +61,11 @@ class View():
 
                 <p1>Your basket is empty<p1>
 
+                <form method="POST" enctype="multipart/form-data" action="/">
+                <input type="submit" value="Back to Home Page"
+
         </body>
         </html>
         """
+
+# {search_input[1]}: £{search_input[2]}

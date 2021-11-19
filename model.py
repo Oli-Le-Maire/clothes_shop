@@ -8,13 +8,15 @@ class Model():
 
     def check_the_stock(self, chosen_item):
         stock_info = Check_Stock().check_the_item(chosen_item.lower())
+        return self.is_stock_there_conditional(stock_info, chosen_item)
+
+    def is_stock_there_conditional(self, stock_info, chosen_item):
         if stock_info[1] == False:
-            print(F"\nWe do not have any {chosen_item} in stock\n")
-            return chosen_item
+            return F"""We do not have any {chosen_item}"""
         elif stock_info[1] == True:
             formatted_item_check = []
             formatted_item_check += stock_info[0]
-            return formatted_item_check
+            return F"{formatted_item_check[1]}: £{formatted_item_check[2]}"
         else:
             print("Error")
 

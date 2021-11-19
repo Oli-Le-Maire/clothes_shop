@@ -3,9 +3,11 @@ import cgi
 #cgi = common gateway interface....processes information submitted through a form
 
 taskList = ['Task 1', 'Task 2', 'Task 3']
+#what will be displayed by the HTML below
 
 class requestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
+        #if self.path.endswith will take in each webpage
         if self.path.endswith('/tasklist'):
             self.send_response(200)
             #this is required as the 200 is essential for get requests
@@ -33,7 +35,8 @@ class requestHandler(BaseHTTPRequestHandler):
             output += '<html><body>'
             output += '<h1>Add Task List</h1>'
                       #form starts below -------
-            output += '<form method="POST" enctype="multipart/form-data" action="/tasklist/new">'
+            output += """<form method="POST" enctype="multipart/form-data"
+                      action="/tasklist/new">"""
             output += '<input name="task" type="text" placeholder="Add new task">'
             output += '<input type="submit" value="Add">'
             output += '</form>'
@@ -51,7 +54,8 @@ class requestHandler(BaseHTTPRequestHandler):
             output = ''
             output += '<html><body>'
             output += '<h1>Remove task: %s</h1>' % listIDPath.replace('%20', ' ')
-            output += '<form method="POST" enctype="multipart/form-data" action="/tasklist/%s/remove">' % listIDPath
+            output += """<form method="POST" enctype="multipart/form-data"
+                      action="/tasklist/%s/remove">""" % listIDPath
             output += '<input type="submit" value="Remove"></form>'
             output += '<a href="/tasklist">Cancel</a>'
             output += '</body><html>'
@@ -62,15 +66,22 @@ class requestHandler(BaseHTTPRequestHandler):
             ctype, pdict = cgi.parse_header(self.headers.get('content-type'))
 
             #cgi.parse_header prints the following:
-            #('multipart/form-data', {'boundary': '----WebKitFormBoundarySI9zI5IsHSljghMR'})
+            #('multipart/form-data',
+            #{'boundary': '----WebKitFormBoundarySI9zI5IsHSljghMR'})
 
-            #the double variable takes in the first index of the tuple to the first variable and the second index of the tuple to the second variable
-            #ctype is equal to the 1st index of the tuple, the entype section of the form: "multipart/form-data"
-            #pdict is equal to the 2nd index of the tuple, the boundary key produced by the cgi.parse... command
-            #a Boundary Key allows the server to separate the values in a form, such as separating form_method, enctype, action etc
+            #the double variable takes in the first index of the tuple....
+            #....to the first variable and the second index of the tuple to....
+            #....the second variable
+            #ctype is equal to the 1st index of the tuple, the entype section....
+            #....of the form: "multipart/form-data"
+            #pdict is equal to the 2nd index of the tuple, the boundary key....
+            #....produced by the cgi.parse... command
+            #a Boundary Key allows the server to separate the values in a form,....
+            #....such as separating form_method, enctype, action etc
 
             #ctype therefore = 'multipart/form-data'
-            #pdict therefore = {'boundary': '----WebKitFormBoundarySI9zI5IsHSljghMR'}
+            #pdict therefore = ....
+            #....{'boundary': '----WebKitFormBoundarySI9zI5IsHSljghMR'}
 
             #All 3 lines below are configurations
             pdict['boundary'] = bytes(pdict['boundary'], "utf-8")
@@ -82,7 +93,8 @@ class requestHandler(BaseHTTPRequestHandler):
 #THEN DO THE LOGIC NECESSARY / CHANGE THE BACKEND
 
                 fields = cgi.parse_multipart(self.rfile, pdict)
-                #cgi.parse_multipart will breakdown the form, and the pdict will read the values separately.
+                #cgi.parse_multipart will breakdown the form, and the pdict....
+                #....will read the values separately.
                 #The only value that this will return will be 'task':
                 #{'task': ['My Input']}
                 new_task = fields.get('task')
@@ -91,8 +103,10 @@ class requestHandler(BaseHTTPRequestHandler):
 
 #THEN REDIRECT TO THE FRONT END
 
-            self.send_response(301) #301 is a redirect command, rather than a 200 which simply gets.
-            #The location of the redirect is in the 2nd send_header line below (/tasklist)
+            self.send_response(301) #301 is a redirect command, rather than a....
+            #....200 which simply gets.
+            #The location of the redirect is in the 2nd send_header line....
+            #....below (/tasklist)
             self.send_header('content-type', 'text/html')
             self.send_header('Location', '/tasklist')
             self.end_headers()
