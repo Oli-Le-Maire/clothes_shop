@@ -4,12 +4,12 @@ class View():
         return F"""
         <html>
         <head>
+            <link rel="stylesheet" href="style.css"/>
             <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
         </head>
         <body>
 
             <h1>Clothes Shop</h1>
-
                 <p1>Welcome to Oli\'s Clothes Shop!!!
                 We\'ve only just started up so our website is
                 very much still in development, so please bare with us.
