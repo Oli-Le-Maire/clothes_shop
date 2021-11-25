@@ -1,6 +1,7 @@
 import psycopg2
-from config import config
-from connect import Connect_to_db
+from .db.config import config
+from .db.connect import Connect_to_db
+import os
 
 class Stock():
 
@@ -68,6 +69,7 @@ class Stock():
         conn = None
 
         try:
+
             params = config()
             conn = psycopg2.connect(**params)
             cur = conn.cursor()

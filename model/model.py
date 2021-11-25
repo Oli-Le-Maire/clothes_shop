@@ -1,8 +1,8 @@
 import psycopg2
-from stock import Stock
-from basket import Basket
-from check_stock import Check_Stock
-from config import config
+from .stock import Stock
+from .basket import Basket
+from .check_stock import Check_Stock
+from .db.config import config
 
 class Model():
 

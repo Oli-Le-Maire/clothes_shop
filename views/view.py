@@ -5,7 +5,7 @@ class View():
         <html>
         <head>
             <link rel="stylesheet" href="style.css"/>
-            <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+            <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
         </head>
         <body>
 
@@ -39,7 +39,7 @@ class View():
 
             <h1>Search Results</h1>
 
-                <p1>We have the following...<br><p1>
+                <p1>Your search returned the following results <br><p1>
                 <p2><br> {is_stock_there_conditional} </p2>
 
                 <form method="POST" enctype="multipart/form-data" action="/">
